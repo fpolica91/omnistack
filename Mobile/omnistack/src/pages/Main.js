@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps'
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location'
 import { MaterialIcons } from "@expo/vector-icons"
 import api from './services/api';
+import { connect, disconnect, subscribeToNewDevs } from './services/socket.client'
 
 const Main = ({ navigation }) => {
     const [devs, setDevs] = useState([])
@@ -31,8 +32,24 @@ const Main = ({ navigation }) => {
     }, []);
 
 
+    useEffect(() => {
+        subscribeToNewDevs(dev => setDevs([...devs, dev]))
+    }, [devs])
+
+
     const handleRegionChange = (region) => {
         setCurrentRegion(region)
+    }
+
+    const setupSocket = () => {
+        disconnect()
+        const { latitude, longitude } = currentRegion
+        connect(
+            latitude,
+            longitude,
+            techs
+        );
+
     }
 
 
@@ -47,6 +64,8 @@ const Main = ({ navigation }) => {
             }
         })
         setDevs(response.data)
+
+        setupSocket()
     }
 
     if (!currentRegion) {
@@ -98,7 +117,6 @@ const Main = ({ navigation }) => {
                 <TouchableOpacity onPress={loadDevs} style={styles.loadButton}>
                     <MaterialIcons name="my-location" size={20} color="#FFF" />
                 </TouchableOpacity>
-
             </View>
         </>
     )

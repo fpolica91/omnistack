@@ -9,13 +9,8 @@ Find a developer in your area according to technologies needed
 3. run yarn or npm i
 4. run command yarn start
 
-### Technologies Used
+### Technologies Used 💼 
 
-1.Node.js
-2.Expo
-3.Socket.io
-4.Mongoose
-5.MongoDB
-
+Node.js, react-native, expo, socket.io,  mongoose, mongoDB, express
 
 
